@@ -106,8 +106,8 @@ pub fn run() {
 
                 // Track cumulative network bytes to compute per-second speed.
                 // On each tick we calculate: current_total - previous_total = bytes/sec.
-                let mut prev_rx: u64 = nets.iter().map(|(_, n)| n.total_received()).sum();
-                let mut prev_tx: u64 = nets.iter().map(|(_, n)| n.total_transmitted()).sum();
+                let mut prev_rx: u64 = nets.values().map(|n| n.total_received()).sum();
+                let mut prev_tx: u64 = nets.values().map(|n| n.total_transmitted()).sum();
 
                 loop {
                     // Refresh only the subsystems we actually read from.
@@ -158,8 +158,8 @@ pub fn run() {
 
                     // ── Network throughput (bytes/sec) ─────────────────
                     // Calculate delta since the last tick (≈ 1 second) to derive speed.
-                    let cur_rx: u64 = nets.iter().map(|(_, n)| n.total_received()).sum();
-                    let cur_tx: u64 = nets.iter().map(|(_, n)| n.total_transmitted()).sum();
+                    let cur_rx: u64 = nets.values().map(|n| n.total_received()).sum();
+                    let cur_tx: u64 = nets.values().map(|n| n.total_transmitted()).sum();
                     let dl = cur_rx.saturating_sub(prev_rx);
                     let ul = cur_tx.saturating_sub(prev_tx);
                     prev_rx = cur_rx;
