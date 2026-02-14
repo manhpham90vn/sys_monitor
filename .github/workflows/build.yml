@@ -107,14 +107,20 @@ jobs:
       - name: Run Clippy
         run: cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
 
-      - name: Build macOS App & DMG
-        run: npx tauri build
+      - name: Build macOS (x86_64)
+        run: npx tauri build --target x86_64-apple-darwin
+
+      - name: Build macOS (ARM64)
+        run: npx tauri build --target aarch64-apple-darwin
 
       - name: Prepare artifacts
         run: |
           mkdir release-artifacts
-          cp src-tauri/target/release/bundle/dmg/*.dmg release-artifacts/
-          cp -r src-tauri/target/release/bundle/macos/*.app release-artifacts/
+          # Copy from target-specific directories
+          cp src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/*.dmg release-artifacts/
+          cp -r src-tauri/target/x86_64-apple-darwin/release/bundle/macos/*.app release-artifacts/
+          cp src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg release-artifacts/
+          cp -r src-tauri/target/aarch64-apple-darwin/release/bundle/macos/*.app release-artifacts/
 
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
