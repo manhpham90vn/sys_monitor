@@ -40,7 +40,10 @@ impl Default for AppSettings {
 pub struct SettingsState(Arc<Mutex<AppSettings>>);
 
 fn get_config_path(app: &AppHandle) -> Option<std::path::PathBuf> {
-    app.path().app_config_dir().ok().map(|p| p.join("settings.json"))
+    app.path()
+        .app_config_dir()
+        .ok()
+        .map(|p| p.join("settings.json"))
 }
 
 fn load_settings(app: &AppHandle) -> AppSettings {
@@ -184,10 +187,8 @@ pub fn run() {
                 sys.refresh_cpu_usage();
                 thread::sleep(Duration::from_millis(500));
 
-                let mut prev_rx: u64 =
-                    nets.values().map(|n| n.total_received()).sum();
-                let mut prev_tx: u64 =
-                    nets.values().map(|n| n.total_transmitted()).sum();
+                let mut prev_rx: u64 = nets.values().map(|n| n.total_received()).sum();
+                let mut prev_tx: u64 = nets.values().map(|n| n.total_transmitted()).sum();
 
                 loop {
                     sys.refresh_cpu_usage();
@@ -219,10 +220,8 @@ pub fn run() {
 
                     let load = System::load_average().one;
 
-                    let disk_total: u64 =
-                        disks.iter().map(|d| d.total_space()).sum();
-                    let disk_avail: u64 =
-                        disks.iter().map(|d| d.available_space()).sum();
+                    let disk_total: u64 = disks.iter().map(|d| d.total_space()).sum();
+                    let disk_avail: u64 = disks.iter().map(|d| d.available_space()).sum();
 
                     let disk_pct = if disk_total > 0 {
                         ((disk_total - disk_avail) as f64 / disk_total as f64 * 100.0) as f32
@@ -230,10 +229,8 @@ pub fn run() {
                         0.0
                     };
 
-                    let cur_rx: u64 =
-                        nets.values().map(|n| n.total_received()).sum();
-                    let cur_tx: u64 =
-                        nets.values().map(|n| n.total_transmitted()).sum();
+                    let cur_rx: u64 = nets.values().map(|n| n.total_received()).sum();
+                    let cur_tx: u64 = nets.values().map(|n| n.total_transmitted()).sum();
 
                     let dl = cur_rx.saturating_sub(prev_rx);
                     let ul = cur_tx.saturating_sub(prev_tx);
