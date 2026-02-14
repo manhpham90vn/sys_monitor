@@ -26,7 +26,11 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["deb"],
+    "targets": [
+      "deb",
+      "app",
+      "dmg"
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -37,10 +41,16 @@
     "category": "Utility",
     "linux": {
       "deb": {
-        "depends": ["libayatana-appindicator3-1"],
+        "depends": [
+          "libayatana-appindicator3-1"
+        ],
         "section": "utils",
         "priority": "optional"
       }
+    },
+    "macOS": {
+      "frameworks": [],
+      "minimumSystemVersion": "10.13"
     }
   }
 }
