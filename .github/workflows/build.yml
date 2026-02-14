@@ -149,8 +149,6 @@ jobs:
         with:
           tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
           files: |
-            dist-linux/*.deb
-            dist-macos/*.dmg
-            dist-macos/*.app
-            dist-macos/*.zip
+            dist-linux/*
+            dist-macos/*
           generate_release_notes: true
