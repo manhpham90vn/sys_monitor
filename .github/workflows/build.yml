@@ -63,11 +63,16 @@ jobs:
       - name: Build .deb
         run: npx tauri build
 
+      - name: Prepare artifacts
+        run: |
+          mkdir release-artifacts
+          cp src-tauri/target/release/bundle/deb/*.deb release-artifacts/
+
       - name: Upload .deb artifact
         uses: actions/upload-artifact@v4
         with:
           name: sys-monitor-deb
-          path: src-tauri/target/release/bundle/deb/*.deb
+          path: release-artifacts/*
 
 
   build-macos:
@@ -105,13 +110,17 @@ jobs:
       - name: Build macOS App & DMG
         run: npx tauri build
 
+      - name: Prepare artifacts
+        run: |
+          mkdir release-artifacts
+          cp src-tauri/target/release/bundle/dmg/*.dmg release-artifacts/
+          cp -r src-tauri/target/release/bundle/macos/*.app release-artifacts/
+
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
           name: sys-monitor-macos
-          path: |
-            src-tauri/target/release/bundle/dmg/*.dmg
-            src-tauri/target/release/bundle/macos/*.app
+          path: release-artifacts/*
 
 
   release:
@@ -148,6 +157,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+
           files: |
             dist-linux/*
             dist-macos/*
