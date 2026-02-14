@@ -152,4 +152,5 @@ jobs:
             dist-linux/*.deb
             dist-macos/*.dmg
             dist-macos/*.app
+            dist-macos/*.zip
           generate_release_notes: true
